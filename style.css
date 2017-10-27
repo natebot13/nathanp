@@ -1,0 +1,48 @@
+html, body {
+  background-color: black;
+  margin: 0;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 18px;
+}
+
+.term {
+  padding: 1rem;
+}
+
+.warning {
+  color: yellow;
+}
+
+.error {
+  color: red;
+}
+
+.prompt {
+  color: blue;
+}
+
+.text {
+  color: white;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.current {
+  display: inline-block;
+}
+
+.cursor {
+  display: inline-block;
+  background-color: white;
+  width: 0.6rem;
+  height: 0.2rem;
+}
+
+::selection {
+  background: #fff;
+  color: #000;
+}
+::-moz-selection {
+  background: #fff;
+  color: #000;
+}
