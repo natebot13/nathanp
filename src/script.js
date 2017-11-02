@@ -1,6 +1,6 @@
 $(document).ready(() => {
   const cursorWidth = 0.6;
-  const prompt = "nathanp:~$ ";
+  const prompt = "<span class='prompt'>nathanp:~$ </span>";
   let lines = [""];
   let historyNum = 0;
   let typing = false;
@@ -12,6 +12,14 @@ $(document).ready(() => {
   let hn = () => {
     return lines.length - historyNum - 1;
   };
+
+  const print = (s, newline="\n") => {
+    pt.append(s + newline);
+  };
+
+  const commands = {
+    help: () => {print(helpText)}
+  }
 
   let update = (insert = '', remove = 0, cursorDelta = 0, historyDelta = 0) => {
     historyNum += historyDelta;
@@ -30,11 +38,19 @@ $(document).ready(() => {
   };
 
   let execute = (cmd) => {
+    pt.append(prompt + cmd + '\n');
+    if (cmd === "") return
     historyNum = 0;
     lines[hn()] = cmd;
     lines.push("");
-    console.log(cmd);
-    pt.html(pt.html() + '\n' + prompt + cmd)
+    parse = cmd.split(" ");
+    
+    try {
+      commands[parse[0]]();
+    }
+    catch (err) {
+      console.error(err);
+    }  
     update()
   };
 
@@ -69,7 +85,6 @@ $(document).ready(() => {
         update();
         break;
       case "Home":
-        update("", 0, 0);
         update();
         break;
       case "Enter":
