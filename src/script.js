@@ -1,3 +1,13 @@
+const helpText = "nathanp console, version 1.0-release (Updated on 11/2/2017)\n\
+These shell commands are defined internally. Type 'help' to see this list.\n\
+Type 'help name' to find out more about the function 'name'\n\
+Use 'info nathanp' to find out more about this site in general\n\
+\n\
+about \t\tGives a little about me"
+
+const aboutText = "My name is Nathan Pannell, and I'm an Electrical Engineering and Computer Science major at University of California, Berkeley. \
+I'm currently a Senior, graduating in Spring of 2018, looking for work in Silicon Valley or the gaming industry."
+
 $(document).ready(() => {
   const cursorWidth = 0.6;
   const prompt = "<span class='prompt'>nathanp:~$ </span>";
@@ -18,8 +28,20 @@ $(document).ready(() => {
   };
 
   const commands = {
-    help: () => {print(helpText)}
+    help: () => {print(helpText)},
+    about: () => {print(aboutText)}
   }
+
+  const parseCommand = (cmd, ...args) => {
+    console.log(cmd);
+    if (!(cmd in commands)) return;
+    try {
+      commands[cmd](...args);
+    } catch (err) {
+      console.error(err);
+    }
+
+  };
 
   let update = (insert = '', remove = 0, cursorDelta = 0, historyDelta = 0) => {
     historyNum += historyDelta;
@@ -43,15 +65,8 @@ $(document).ready(() => {
     historyNum = 0;
     lines[hn()] = cmd;
     lines.push("");
-    parse = cmd.split(" ");
-    
-    try {
-      commands[parse[0]]();
-    }
-    catch (err) {
-      console.error(err);
-    }  
-    update()
+    parseCommand(...cmd.split(" "));
+    update();
   };
 
   window.addEventListener("keypress", (e) => {
