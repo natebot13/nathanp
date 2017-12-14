@@ -1,9 +1,29 @@
-const helpText = "nathanp console, version 1.0-release (Updated on 11/2/2017)\n\
-These shell commands are defined internally. Type 'help' to see this list.\n\
-Type 'help name' to find out more about the function 'name'\n\
-Use 'info nathanp' to find out more about this site in general\n\
-\n\
-about \t\tGives a little about me"
+const startingText = `Logging in to nathanp.me...
+Log in successful!
+
+WWW           WWW EEEEEEE LLL      CCCCCCC  OOOOOOO  MMMMM   MMMMM EEEEEEE
+ WWW    W    WWW  EEE     LLL     CCCC     OOOO OOOO MMMMMM MMMMMM EEE
+  WWW  WWW  WWW   EEEEEEE LLL     CCC      OOO   OOO MMM  MMM  MMM EEEEEEE
+   WWWWWWWWWWW    EEE     LLL     CCCC     OOOO OOOO MMM   M   MMM EEE
+    WWW   WWW     EEEEEEE LLLLLLLL CCCCCCC  OOOOOOO  MMM       MMM EEEEEEE
+
+ _____
+/     \\
+vvvvvvv  /|__/|
+   I   /O,O   |
+   I /_____   |      /|/|
+  J|/^ ^ ^ \\  |    /00  |    _//|
+   |^ ^ ^ ^ |W|   |/^^\\ |   /oo |
+    \\m___m__|_|    \\m_m_|   \\mm_|
+
+Type 'help' for more information."
+
+const helpText = "nathanp console, version 1.0-release (Updated on 11/2/2017)
+These shell commands are defined internally. Type 'help' to see this list.
+Type 'help name' to find out more about the function 'name'
+Use 'info nathanp' to find out more about this site in general
+
+about\t\tGives a little about me`
 
 const aboutText = "My name is Nathan Pannell, and I'm an Electrical Engineering and Computer Science major at University of California, Berkeley. \
 I'm currently a Senior, graduating in Spring of 2018, looking for work in Silicon Valley or the gaming industry."
@@ -15,6 +35,7 @@ $(document).ready(() => {
   let historyNum = 0;
   let typing = false;
   let ct = $('.current .text');
+  ct.hide();
   let pt = $('.previous .text');
   let cursor = $('.cursor');
   let cursorLoc = 0;
@@ -69,8 +90,9 @@ $(document).ready(() => {
     update();
   };
 
+  const ignore = ["Enter", "ArrowLeft", "ArrowRight", "Backspace"];
   window.addEventListener("keypress", (e) => {
-    if (e.key == "Enter") return;
+    if (ignore.includes(e.key)) return;
     typing = true;
     update(e.key, 0);
   });
@@ -118,4 +140,20 @@ $(document).ready(() => {
     } else cursor.toggle();
   }, 500);
 
+  const linePrinter = (text, times, finished = () => {}) => {
+    console.log(times);
+    if (text.length == 0) {
+      finished();
+      return;
+    }
+    if (times.length == 0) {
+      print(text);
+      finished();
+      return;
+    }
+    const lines = text.split("\n");
+    print(lines[0])
+    setTimeout(() => {linePrinter(lines.slice(1).join("\n"), times.slice(1))}, times[0]);
+  }
+  linePrinter(startingText, [1000, 200, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 200], () => {ct.show();});
 });
